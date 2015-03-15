@@ -6,29 +6,33 @@ output: html_document
 ---
 
 Loading the data
-```{r}
+
+```r
 data <- read.csv("./activity/activity.csv")
 ```
 
 ###What is mean total number of steps taken per day?
 
 Calculating the total number of steps taken per day
-```{r}
+
+```r
 total_steps <- aggregate(steps ~ date, data, sum)
 ```
 
 Calculating the mean and median of the total number of steps taken per day
-```{r}
+
+```r
 mean_steps <- as.integer(round(mean(total_steps$steps)))
 median_steps <- as.integer(round(median(total_steps$steps)))
 ```
 
 
-The mean of the total number of steps is `r mean_steps`.
-The median of the total number of steps is `r median_steps`.
+The mean of the total number of steps is 10766.
+The median of the total number of steps is 10765.
 
 Drawing a histogram of the total number of steps taken each day
-```{r}
+
+```r
 lab1 <- paste("Mean   - ", mean_steps)
 lab2 <- paste("Median - ", median_steps)
 library(ggplot2)
@@ -44,30 +48,36 @@ g <- g + geom_histogram(binwidth=1000, colour="black", fill="white") +
 print(g)
 ```
 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+
 ###What is the average daily activity pattern?
 
 Calculating the average number of steps taken, averaged across all days
-```{r}
+
+```r
 aver_steps <- aggregate(steps ~ interval, data, mean)
 ```
 
 Converting the 5-minute interval in POSIXct format
-```{r}
+
+```r
 aver_steps$date <- formatC(aver_steps$interval, width = 4, format = "d", flag = "0")
 aver_steps$date <- as.POSIXct(paste("20150311", aver_steps$date), format="%Y%m%d %H%M")
 ```
 
 Calculating the 5-minute interval, containing the maximum number of steps
 
-```{r}
+
+```r
 max_interval <- aver_steps$date[aver_steps$steps == max(aver_steps$steps)]
 max_interval_time <- substr(as.character(max_interval),12,16)
 ```
 
-5-minute interval from `r max_interval_time` contains the maximum number of steps
+5-minute interval from 08:35 contains the maximum number of steps
 
 Drawing a time series plot
-```{r}
+
+```r
 library(scales)
 line_max_interval <- as.numeric(max_interval)
 g <- ggplot(aver_steps, aes(date, steps))
@@ -86,3 +96,5 @@ g <- g +
 
 print(g)
 ```
+
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
